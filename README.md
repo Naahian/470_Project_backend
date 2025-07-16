@@ -15,7 +15,7 @@ app/
 ├── model/            # Database models
 ├── schema/           # Pydantic schemas
 ├── crud/             # Database operations
-├── database/         # Database configuration
+├── database.py         # Database configuration
 ├── __init__.py         # Database initialization
 ├── main.py             # FastAPI application
 ├── requirements.txt    # Dependencies
