@@ -1,34 +1,26 @@
-# FastAPI Auth API
-
-A FastAPI application with JWT authentication and role-based access control (RBAC) using MySQL database.
+# 470 Project Backend (FastAPI+MySQL)
 
 ## Features
-
-- JWT-based authentication
-- Role-based access control (User, Admin)
-- User registration and login
-- Protected routes with different access levels
-- MySQL database integration
-- Ready for Render deployment
+- Password hashing using bcrypt
+- JWT token authentication
+- Role-based access control
+- Token expiration
+- Input validation with Pydantic
+- SQL injection protection with SQLAlchemy
 
 ## Project Structure
-
 ```
 app/
 ├── routes/
-│   ├── auth.py         # Authentication routes
-│   ├── users.py        # User management routes
-│   └── items.py        # Item management routes
-├── model.py            # Database models
-├── schema.py           # Pydantic schemas
-├── crud.py             # Database operations
-├── database.py         # Database configuration
+├── model/            # Database models
+├── schema/           # Pydantic schemas
+├── crud/             # Database operations
+├── database/         # Database configuration
 ├── __init__.py         # Database initialization
 ├── main.py             # FastAPI application
 ├── requirements.txt    # Dependencies
 └── .env               # Environment variables
 ```
-
 ## Setup Instructions
 
 ### Local Development
@@ -55,24 +47,7 @@ python main.py
 The API will be available at `http://localhost:8000`
 
 ### Render Deployment
-
-1. **Environment Variables on Render:**
-Set the following environment variables in your Render dashboard:
-- `DATABASE_URL`: Your MySQL connection string
-- `SECRET_KEY`: A secure random key for JWT signing
-- `ALGORITHM`: HS256
-- `ACCESS_TOKEN_EXPIRE_MINUTES`: 30
-
-2. **Build Command:**
-```bash
-pip install -r requirements.txt
-```
-
-3. **Start Command:**
-```bash
-python main.py
-```
-
+production server is running at https://render.com/
 ## API Endpoints
 
 ### Authentication
@@ -107,14 +82,6 @@ python main.py
 - Can delete users
 - Can update and delete items
 
-## Default Admin User
-
-On first startup, a default admin user is created:
-- **Email:** admin@example.com
-- **Password:** admin123
-- **Role:** Admin
-
-**⚠️ Important:** Change the default admin password in production!
 
 ## Usage Examples
 
@@ -143,37 +110,3 @@ curl -X GET "http://localhost:8000/auth/me" \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
 
-## Database Schema
-
-### Users Table
-- `id` (Primary Key)
-- `email` (Unique)
-- `username` (Unique)
-- `hashed_password`
-- `full_name`
-- `role` (USER/ADMIN)
-- `is_active`
-- `created_at`
-- `updated_at`
-
-### Items Table
-- `id` (Primary Key)
-- `title`
-- `description`
-- `created_at`
-- `updated_at`
-
-## Security Features
-
-- Password hashing using bcrypt
-- JWT token authentication
-- Role-based access control
-- Token expiration
-- Input validation with Pydantic
-- SQL injection protection with SQLAlchemy
-
-## API Documentation
-
-Once the application is running, you can access:
-- **Interactive API docs:** `http://localhost:8000/docs`
-- **ReDoc documentation:** `http://localhost:8000/redoc`
