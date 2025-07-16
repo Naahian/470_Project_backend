@@ -1,5 +1,5 @@
 # 470 Project Backend (FastAPI+MySQL)
-
+(.env in github for to testing.)
 ## Features
 - Password hashing using bcrypt
 - JWT token authentication
