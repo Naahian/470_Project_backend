@@ -1,112 +1,204 @@
-# 470 Project Backend (FastAPI+MySQL)
-(.env in github since its dev phase.)
-## Features
-- Password hashing using bcrypt
-- JWT token authentication
-- Role-based access control
-- Token expiration
-- Input validation with Pydantic
-- SQL injection protection with SQLAlchemy
+# Inventory Management Backend API
 
-## Project Structure
-```
-app/
-├── routes/
-├── model/            # Database models
-├── schema/           # Pydantic schemas
-├── crud/             # Database operations
-├── database.py         # Database configuration
-├── __init__.py         # Database initialization
-├── main.py             # FastAPI application
-├── requirements.txt    # Dependencies
-└── .env               # Environment variables
-```
-## Setup Instructions
+This is a **FastAPI + SQLAlchemy + MySQL** backend for an Inventory Management App. It enables managing products, categories, suppliers, transactions, and users efficiently with robust RESTful APIs. Built to support inventory tracking, sales logging, and stock-level insights.
 
-### Local Development
+---
 
-1. **Install dependencies:**
+## ✨ Features
+
+- User authentication & roles (`admin`, `user`)
+- Product & category management
+- Supplier management
+- Transaction tracking (sales & purchases)
+- Analytics-ready schema (created_by, timestamps, etc.)
+- Aiven MySQL cloud DB support with SSL
+- Modular and scalable project structure
+
+---
+
+## ⚡ Usage (Development)
+
+### 1. Clone the repo
 ```bash
+git clone https://github.com/your-username/inventory-backend.git
+cd inventory-backend
+```
+
+### 2. Setup Python environment
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-2. **Set up environment variables:**
-Create a `.env` file with:
-```
-DATABASE_URL=mysql+mysqlconnector://username:password@localhost/database_name
-SECRET_KEY=your-secret-key-here-change-this-in-production
-ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=30
+### 3. Setup `.env`
+Create a `.env` file in the root directory:
+
+```env
+DATABASE_URL=mysql+pymysql://<user>:<password>@<host>:<port>/<dbname>?ssl_ca=ca.pem
 ```
 
-3. **Run the application:**
+- Make sure `ca.pem` is also in the root if using Aiven MySQL.
+
+### 4. Run DB migrations (if using Alembic)
 ```bash
-python main.py
+alembic upgrade head
 ```
 
-The API will be available at `http://localhost:8000`
-
-### Render Deployment
-production server is running at https://render.com/
-## API Endpoints
-
-### Authentication
-- `POST /auth/register` - Register new user
-- `POST /auth/login` - Login user
-- `GET /auth/me` - Get current user info
-
-### Users (Admin only for most operations)
-- `GET /users/` - Get all users (Admin only)
-- `GET /users/{user_id}` - Get user by ID
-- `PUT /users/{user_id}` - Update user
-- `DELETE /users/{user_id}` - Delete user (Admin only)
-
-### Items
-- `GET /items/` - Get all items (Authenticated users)
-- `GET /items/{item_id}` - Get item by ID (Authenticated users)
-- `POST /items/` - Create item (Authenticated users)
-- `PUT /items/{item_id}` - Update item (Admin only)
-- `DELETE /items/{item_id}` - Delete item (Admin only)
-
-## Role-Based Access Control
-
-### User Role
-- Can register and login
-- Can view and create items
-- Can view and update their own profile
-
-### Admin Role
-- All User permissions
-- Can view all users
-- Can update any user
-- Can delete users
-- Can update and delete items
-
-
-## Usage Examples
-
-### Register a new user:
+### 5. Start the app
 ```bash
-curl -X POST "http://localhost:8000/auth/register" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "user@example.com",
-    "username": "testuser",
-    "password": "password123",
-    "full_name": "Test User"
-  }'
+uvicorn main:app --reload
 ```
 
-### Login:
+Open in browser: [http://localhost:8000/docs](http://localhost:8000/docs)
+
+---
+
+## 🧭 API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST   | `/auth/register` | Register a new user |
+| POST   | `/auth/login` | Login and get JWT token |
+| GET    | `/users/me` | Get current user info |
+| GET/POST/PUT/DELETE | `/products/` | CRUD for products |
+| GET/POST/PUT/DELETE | `/categories/` | CRUD for categories |
+| GET/POST/PUT/DELETE | `/suppliers/` | CRUD for suppliers |
+| GET/POST | `/transactions/` | Record and view transactions |
+| GET    | `/analytics/summary` | Get summary analytics (if implemented) |
+
+> 📘 Full Swagger docs available at `/docs`
+
+---
+
+## 📂 Project Structure (Simplified)
+
+```
+app/
+├── main.py
+├── models/
+├── schemas/
+├── routes/
+├── services/
+├── database.py
+├── config.py
+.env
+ca.pem
+```
+
+---
+
+## ⚠️ .gitignore
+
+Make sure to ignore sensitive files:
+
+```gitignore
+.env
+ca.pem
+__pycache__/
+*.pyc
+```
+
+---
+# Inventory Management Backend API
+
+This is a **FastAPI + SQLAlchemy + MySQL** backend for an Inventory Management App. It enables managing products, categories, suppliers, transactions, and users efficiently with robust RESTful APIs. Built to support inventory tracking, sales logging, and stock-level insights.
+
+---
+
+## ✨ Features
+
+- User authentication & roles (`admin`, `user`)
+- Product & category management
+- Supplier management
+- Transaction tracking (sales & purchases)
+- Analytics-ready schema (created_by, timestamps, etc.)
+- Aiven MySQL cloud DB support with SSL
+- Modular and scalable project structure
+
+---
+
+## ⚡ Usage (Development)
+
+### 1. Clone the repo
 ```bash
-curl -X POST "http://localhost:8000/auth/login" \
-  -H "Content-Type: application/x-www-form-urlencoded" \
-  -d "username=user@example.com&password=password123"
+git clone https://github.com/your-username/inventory-backend.git
+cd inventory-backend
 ```
 
-### Access protected endpoint:
+### 2. Setup Python environment
 ```bash
-curl -X GET "http://localhost:8000/auth/me" \
-  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
 ```
 
+### 3. Setup `.env`
+Create a `.env` file in the root directory:
+
+```env
+DATABASE_URL=mysql+pymysql://<user>:<password>@<host>:<port>/<dbname>?ssl_ca=ca.pem
+```
+
+- Make sure `ca.pem` is also in the root if using Aiven MySQL.
+
+### 4. Run DB migrations (if using Alembic)
+```bash
+alembic upgrade head
+```
+
+### 5. Start the app
+```bash
+uvicorn main:app --reload
+```
+
+Open in browser: [http://localhost:8000/docs](http://localhost:8000/docs)
+
+---
+
+## 🧭 API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST   | `/auth/register` | Register a new user |
+| POST   | `/auth/login` | Login and get JWT token |
+| GET    | `/users/me` | Get current user info |
+| GET/POST/PUT/DELETE | `/products/` | CRUD for products |
+| GET/POST/PUT/DELETE | `/categories/` | CRUD for categories |
+| GET/POST/PUT/DELETE | `/suppliers/` | CRUD for suppliers |
+| GET/POST | `/transactions/` | Record and view transactions |
+| GET    | `/analytics/summary` | Get summary analytics (if implemented) |
+
+> 📘 Full Swagger docs available at `/docs`
+
+---
+
+## 📂 Project Structure (Simplified)
+
+```
+app/
+├── main.py
+├── models/
+├── schemas/
+├── routes/
+├── services/
+├── database.py
+├── config.py
+.env
+ca.pem
+```
+
+---
+
+## ⚠️ .gitignore
+
+Make sure to ignore sensitive files:
+
+```gitignore
+.env
+ca.pem
+__pycache__/
+*.pyc
+```
+
+---
