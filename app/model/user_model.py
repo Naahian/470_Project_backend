@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, Enum
 from sqlalchemy.sql import func
+from sqlalchemy.orm import relationship
 from database import Base
 import enum
 
@@ -15,16 +16,10 @@ class User(Base):
     username = Column(String(50), unique=True, index=True, nullable=False)
     hashed_password = Column(String(255), nullable=False)
     full_name = Column(String(100), nullable=True)
-    role = Column(Enum(UserRole), default=UserRole.USER)
-    is_active = Column(Boolean, default=True)
+    role = Column(Enum(UserRole), default=UserRole.USER) 
+    is_active = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
-class Item(Base):
-    __tablename__ = "items"
-    
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String(255), nullable=False)
-    description = Column(String(1000), nullable=True)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    transactions = relationship("KTransaction", back_populates="user")
+    created_products = relationship("Product", back_populates="creator")

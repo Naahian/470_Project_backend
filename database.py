@@ -6,9 +6,16 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL") or "mysql+mysqlconnector://username:password@localhost/database_name"
+SSL_ARGS = {
+    "ssl": {
+        "ca": "ca.pem"
+    }
+}
 
-engine = create_engine(DATABASE_URL)
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+
+engine = create_engine(DATABASE_URL,connect_args=SSL_ARGS)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
