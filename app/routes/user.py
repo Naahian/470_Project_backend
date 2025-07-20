@@ -3,10 +3,10 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from database import get_db
-from schema import UserResponse, UserUpdate
-from model import User
-from routes.auth import get_current_active_user, require_admin
-import crud
+from app.schema.user_schema import  UserResponse, UserUpdate
+from app.model.user_model import User
+from app.routes.auth import get_current_active_user, require_admin
+from app.crud import user_crud as crud
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -15,9 +15,8 @@ def read_users(
     skip: int = 0,
     limit: int = 100,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_admin)
+    current_user: User = Depends(get_current_active_user)
 ):
-    """Admin only: Get all users"""
     users = crud.get_users(db, skip=skip, limit=limit)
     return users
 
@@ -27,7 +26,7 @@ def read_user(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user)
 ):
-    """Get user by ID. Users can only see their own profile, admins can see any user."""
+    #Users can see own profile, admins can see any user
     if current_user.id != user_id and current_user.role.value != "admin":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -42,11 +41,11 @@ def read_user(
 @router.put("/{user_id}", response_model=UserResponse)
 def update_user(
     user_id: int,
-    user: UserUpdate,
+    user:UserUpdate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user)
 ):
-    """Update user. Users can only update their own profile, admins can update any user."""
+    #Users can update own profile, admins can update any user.
     if current_user.id != user_id and current_user.role.value != "admin":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -64,13 +63,13 @@ def update_user(
     return db_user
 
 @router.delete("/{user_id}")
+#admin only
 def delete_user(
     user_id: int,
     db: Session = Depends(get_db),
     current_user: User = Depends(require_admin)
 ):
-    """Admin only: Delete user"""
     db_user = crud.delete_user(db, user_id=user_id)
     if db_user is None:
-        raise HTTPException(status_code=404, detail="User not found")
-    return {"message": "User deleted successfully"}
+        raise HTTPException(status_code=404, detail=f"{user_id} User not found")
+    return {"message": f"User with id:{user_id} deleted successfully",}
