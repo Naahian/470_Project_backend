@@ -22,4 +22,4 @@ class User(Base):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     transactions = relationship("KTransaction", back_populates="user")
-    created_products = relationship("Product", back_populates="creator")
+  

@@ -34,9 +34,6 @@ def create_product(
     db:Session = Depends(get_db),
     current_user:User=Depends(require_admin),
 ):
-    db_product = crud.get_product_by_name(db,product_name=product.name)
-    if(db_product):
-        raise HTTPException(status_code=400,detail="product already exists.")
     
     product = crud.create_product(db, product)
     return product

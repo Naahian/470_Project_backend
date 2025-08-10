@@ -6,13 +6,10 @@ from app.model.category_model import Category
 def create_product(db:Session, product:ProductCreate):
     Category()
     db_product = Product(
-        name=product.name.lower(),
-        description=product.description,
-        quantity=product.quantity,
-        price=product.price,
+        category_name=product.category_name,
+        supplier_name=product.supplier_name,
         category_id=product.category_id,
         supplier_id=product.supplier_id,
-        created_by=product.created_by
     )
 
     db.add(db_product)
@@ -29,10 +26,7 @@ def get_product_by_id(db:Session, product_id:int):
     product = db.query(Product).filter(product_id == Product.id).first()
     return product
 
-def get_product_by_name(db:Session, product_name:str):
-    
-    product = db.query(Product).filter(product_name.lower() == Product.name).first()
-    return product
+
 
 def update_product(db:Session, product_id:int, product:ProductCreate):
     db_product = db.query(Product).filter(Product.id == product_id).first()
