@@ -40,6 +40,7 @@ class TransactionDelete(BaseModel):
 # Order
 class OrderBase(TransactionBase):
     supplier_id: int = Field(..., description="ID of the supplier")
+    category_id: int = Field(..., description="ID of the category")
     payment_id: str = Field(..., description="ID of the payment")
     quantity: int = Field(..., ge=1, description="Quantity of items")
     delivery_date: datetime = Field(..., description="Expected delivery date")

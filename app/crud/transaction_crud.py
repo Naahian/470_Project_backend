@@ -34,6 +34,7 @@ def create_sell(db: Session, sell: SellCreate):
     db.commit()
     db.refresh(db_sell)
     return db_sell
+    
 
 def get_sells(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Sell).offset(skip).limit(limit).all()
