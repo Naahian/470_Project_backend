@@ -7,9 +7,10 @@ from typing import List, Optional
 def create_category( db: Session, category: CategoryCreate):
     """Create a new category"""
     try:
+        print(f"category {category}")
         db_category = Category(
             name=category.name,
-            quantity=category.quantity,
+            quantity=0,
             imageNo=category.imageNo
         )
         db.add(db_category)
@@ -36,7 +37,8 @@ def update_category( db: Session, category_id: int, category_update: CategoryUpd
     if not db_category:
         return None  
     try:
-        update_data = category_update.dict(exclude_unset=True)
+        
+        update_data = category_update.model_dump(exclude_unset=True)
         for field, value in update_data.items():
             setattr(db_category, field, value)
         

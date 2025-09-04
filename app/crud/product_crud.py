@@ -4,14 +4,13 @@ from app.schema.product_schema import ProductCreate
 from app.model.category_model import Category
 
 def create_product(db:Session, product:ProductCreate):
-    Category()
+    
     db_product = Product(
         category_name=product.category_name,
         supplier_name=product.supplier_name,
         category_id=product.category_id,
         supplier_id=product.supplier_id,
     )
-
     db.add(db_product)
     db.commit()
     db.refresh(db_product)
@@ -19,8 +18,7 @@ def create_product(db:Session, product:ProductCreate):
     return db_product
 
 def read_products(db:Session, skip:int=0, limit:int=100):
-    products = db.query(Product).all()
-    return products
+    return db.query(Product).order_by(Product.created_at.desc()).offset(skip).limit(limit).all()
 
 def get_product_by_id(db:Session, product_id:int):
     product = db.query(Product).filter(product_id == Product.id).first()
@@ -44,4 +42,7 @@ def delete_product(db:Session, product_id:int):
         db.delete(db_product)
         db.commit()
     return db_product
+
+def get_products_count(db: Session) -> int:
+    return db.query(Product).count()
 

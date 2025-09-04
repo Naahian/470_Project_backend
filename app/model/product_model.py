@@ -15,7 +15,6 @@ class Product(Base):
     supplier_id = Column(Integer, ForeignKey("suppliers.id"), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
- 
-    transactions = relationship("KTransaction", back_populates="product")
+
     category = relationship("Category", back_populates="products")  
     supplier = relationship("Supplier", back_populates="products")  

@@ -4,7 +4,6 @@ from app.schema.product_schema import ProductResponse
 
 class CategoryBase(BaseModel):
     name: str = Field(..., min_length=1, max_length=50, description="Category name")
-    quantity: int = Field(..., ge=0, description="Total quantity available")
     imageNo: Optional[int] = Field(None, description="Image number reference (optional)")
 
 class CategoryCreate(CategoryBase):
@@ -17,7 +16,8 @@ class CategoryUpdate(BaseModel):
 
 class CategoryResponse(CategoryBase):
     id: int
-
+    quantity: Optional[int] = Field(None, ge=0)
+  
     class Config:
         from_attributes = True  
 

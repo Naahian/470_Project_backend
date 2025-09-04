@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os
-from app.routes import auth, user, product, category, supplier
+from app.routes import auth, payment, transactions, user, product, category, supplier
 from app.__init__ import create_tables
 
 app = FastAPI(
@@ -24,6 +24,8 @@ app.include_router(user.router)
 app.include_router(product.router)
 app.include_router(category.router)
 app.include_router(supplier.router)
+app.include_router(transactions.router)
+app.include_router(payment.router)
 
 
 @app.on_event("startup")

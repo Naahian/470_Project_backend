@@ -1,0 +1,13 @@
+{
+    "files.exclude": {
+        "__pycache__": false,
+        ".venv": false,
+        ".vscode": false,
+        "alembic": false,
+        ".env": false,
+        ".gitignore": false,
+        "alembic.ini": false,
+        "ca.pem": false,
+        "README.md": false
+    }
+}

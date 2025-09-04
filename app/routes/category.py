@@ -22,7 +22,6 @@ def create_category(
     db: Session = Depends(get_db),
     current_user = Depends(get_current_active_user)  
 ):
-    """Create a new category"""
     try:
         return crud.create_category(db=db, category=category)
     except ValueError as e:
@@ -56,7 +55,6 @@ def get_category_with_products(
     category_id: int,
     db: Session = Depends(get_db)
 ):
-    """Get a specific category with its products"""
     category = crud.get_category(db=db, category_id=category_id)
     if not category:
         raise HTTPException(status_code=404, detail="Category not found")
@@ -70,7 +68,6 @@ def update_category(
     db: Session = Depends(get_db),
     current_user = Depends(get_current_active_user)
 ):
-    """Update a category"""
     try:
         updated_category = crud.update_category(
             db=db, 
@@ -90,7 +87,6 @@ def delete_category(
     db: Session = Depends(get_db),
     current_user = Depends(get_current_active_user)  # Add authentication if needed
 ):
-    """Delete a category"""
     try:
         deleted = crud.delete_category(db=db, category_id=category_id)
         if not deleted:
