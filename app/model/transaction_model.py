@@ -26,7 +26,7 @@ class Order(KTransaction):
 
     id = Column(Integer, ForeignKey("transactions.id"), primary_key=True)  
     supplier_id = Column(Integer, ForeignKey("suppliers.id"), nullable=False)
-    payment_info = Column(JSON, nullable=False, default=dict)  # Changed to JSON
+    payment_id = Column(String(100), nullable=False)
     quantity = Column(Integer, nullable=False)
     delivery_date = Column(DateTime, nullable=False)
     is_delivered = Column(Boolean, default=False)
